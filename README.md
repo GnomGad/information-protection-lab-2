@@ -31,19 +31,23 @@
 
 ### Инициализация
 
-```ps
-python -m venv env
-```
-```ps
-.\env\Scripts\Activate.ps1
-```
-```ps
-python -m pip install --upgrade pip
-```
-```ps
-pip install -r .\requirements.txt
+#### Linux
+
+```bash
+python -m venv env && \
+source ./env/bin/activate && \ 
+python -m pip install --upgrade pip && \
+pip install -r ./requirements.txt 
 ```
 
+#### Windows
+
+```bash
+python -m venv env && \
+.\env\Scripts\Activate.ps1 && \ 
+python -m pip install --upgrade pip && \
+pip install -r .\requirements.txt
+```
 
 ### Запуск
 ```ps
