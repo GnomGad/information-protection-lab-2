@@ -1,4 +1,3 @@
-
 import json
 import re
 import time 
@@ -8,49 +7,34 @@ from multiprocessing import Process, Queue, Pool
 from app import get_file_data
 import multiprocessing
 import tqdm
+import os.path
 
-from app import write_data, get_file_data
-path_lab1 = 'C:\\Users\\odin\\source\\github\\information-protection-lab-1\\'
 
-"""Смысл в прямом подборе пароля. Работает только если пароль  x < 5 знаков"""
+class BruteForce():
+    def __init__(self, cores_count:int, start_end:list,app:str, file:str, edir:str)  -> None:
+        self.cores = cores_count
+        self.start_end = start_end
+        self.file = file
+        self.app = app
+        self.dir = edir
 
-# TODO: Вынести в класс этот функционал
+        CORES = multiprocessing.cpu_count()
 
-def execute(i):
-        proc = subprocess.Popen('cd {1} && python app.py -a decrypt -i o.txt -o .\ex\{0}.txt -k {0}'.format(i,path_lab1), shell=True, stdout=PIPE)
+        if  cores_count < 1 or cores_count > CORES:
+            self.cores = CORES
+
+    def execute(self) -> float:
+        lenB= max(self.start_end)+1 - min(self.start_end)
+        start_time = time.time()
+        with Pool(self.cores) as p:
+            res = list(tqdm.tqdm(p.imap(self.command, list(range(min(self.start_end) ,max(self.start_end)+1 ))),total=lenB,desc='Ядрер использовано {0}'.format(self.cores)))
+        end = time.time() - start_time
+        return [self.cores, end, lenB]
+
+    def command(self, i:int) -> int:
+        """Выполнить необходимое действие"""
+        cm = 'python {1} -a decrypt -i {2} -o {3} -k {0}'.format(i, self.app, self.file, os.path.join(self.dir, str(i)+'.txt'))
+        proc = subprocess.Popen(cm, shell=True, stdout=PIPE)
         proc.wait()
-        out = proc.communicate()
+        proc.communicate()
         return i
-
-def check(i):
-    s = get_file_data('{0}ex\\{1}.txt'.format(path_lab1, i))
-    d = s.split(' ')
-    new_lst = lst_words
-    for word in d:
-        word = word.lower()
-        if  word in new_lst:
-            new_lst.remove(word)
-            if not new_lst:
-                return i
-keys = []
-allProcesses = []
-
-lst_words = 'что и в не я хочешь'.split(' ')
-lenB = 10000
-
-if __name__ == '__main__':
-    PROCESSORS = multiprocessing.cpu_count()
-    start_time = time.time()
-    res = []
-    # TODO: перенести в отдельную функцию дешифровку
-    #with Pool(PROCESSORS) as p:
-    #    res = list(tqdm.tqdm(p.imap(execute, list(range(lenB))),total=lenB))
-
-    # TODO: перенести в отдельную функцию поиск
-    with Pool(PROCESSORS) as p:
-        res = list(tqdm.tqdm(p.imap(check, list(range(lenB))),total=lenB))
-        for r in res:
-            if r:
-                print("Предположительный ключ:", r)
-    print('Время выполнения:',time.time() - start_time, 'секунд')
-    print('Все файлы находятся в {0}\\ex\\'.format(path_lab1))
