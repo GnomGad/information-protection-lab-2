@@ -8,6 +8,15 @@ from symbol_analyzer import SymbolAnalyzer
 from app import get_file_data, write_data
 
 
+def read_action(dir, count, files:list):
+    print(files)
+    for file in files:
+        data = get_file_data('{0}/{1}.txt'.format(dir,file))
+        print(file)
+        print(data[0:count])
+
+
+
 def main(args):
     cores = 2 if not args.cores else args.cores
     krange = [1,1]
@@ -49,7 +58,8 @@ def main(args):
         res = ta.execute()
         print('Секунд', res[1])
         print('Возможные ключи', res[3])
-
+        if(args.read):
+            read_action(args.dir, args.read, res[3])
 
 
 
@@ -70,6 +80,7 @@ if __name__ == "__main__":
     parser.add_argument('-r','--range', dest='range',type=str, help='Диапазон в формате 1000:5000')
     parser.add_argument('-c', '--count', dest='count',type=int,  help='Диапазон от 0 до count')
     parser.add_argument('-C','--cores', dest='cores', type=int, help='Количество ядер процессора, что участвуют в процессе max или количество')
+    parser.add_argument('-R','--read', dest='read',type=int, default=0, help='Прочитать количество символов')
     args = parser.parse_args()
 
     main(args)

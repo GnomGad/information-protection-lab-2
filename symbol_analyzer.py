@@ -1,12 +1,20 @@
 import json
 from collections import Counter 
+from app import get_file_data
+
 
 class SymbolAnalyzer:
     """Функционал для работы с анализом символов"""
 
     def get_symbols_frequency(self, data:str) ->  dict:
         """Из текстовой строки анализирует частоту появления каждого символа"""
-        return dict(Counter(data) )
+        return dict(Counter(data))
+
+    def get_symbols_frequency_from_alphabet(self, data:str, alp:list) -> dict:
+        """Из текстовой строки анализирует частоту появления каждого символа и выдает результат только по алфавиту"""
+        symbols_frequency = dict(self.get_symbols_frequency(data))
+        only_symbols = [i for i in symbols_frequency.keys()]
+        return {k:symbols_frequency[k] for k in list(set(only_symbols) & set(alp))}
 
 
     def get_frequency_analyse(self, data:dict,) -> dict:
@@ -32,9 +40,7 @@ class SymbolAnalyzer:
 
 
 if __name__ == '__main__':
-    s = 'keksss'
-    f = 'anas12s218s.json'
+    alp=list('абвгдеёжзийклмнопрстуфхцчшщъыьэюя')
     sa = SymbolAnalyzer()
-    #sa.write(sa.get_frequency_analyse(sa.get_symbols_frequency(s)), f)
-    print(sa.get_sorted_list_symbols(sa.get_symbols_frequency(s)))
-    
+    s = get_file_data('file.txt').lower()
+    print(sa.get_alphabet(sa.get_frequency_analyse(sa.get_symbols_frequency_from_alphabet(s,alp))))
