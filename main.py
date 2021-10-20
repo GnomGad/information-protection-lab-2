@@ -3,6 +3,7 @@ import os.path
 import collections
 import os
 from brute_force import BruteForce
+from text_analyzer import TextAnalyzer
 from symbol_analyzer import SymbolAnalyzer
 from app import get_file_data, write_data
 
@@ -35,11 +36,20 @@ def main(args):
     # Если есть bf и путь с файлом
     if args.bf and os.path.exists(args.bf):
         if not args.encrypted or not os.path.exists(args.encrypted):
-             raise Exception('Нет зашифрованого файла' )
+                raise Exception('Нет зашифрованого файла' )
         bf = BruteForce(cores, krange, args.bf, args.encrypted, args.dir)
-        print('Секунд ', bf.execute())
-    
-    # TODO: реализовать анализатор текста
+        res = bf.execute()
+        print('Секунд ', res[1])
+
+    # если есть verify то отобразить
+    if args.verify:
+        if not os.path.exists(args.verify):
+            raise Exception('Файла со словами не существует')
+        ta = TextAnalyzer(cores, krange, args.verify, args.dir)
+        res = ta.execute()
+        print('Секунд', res[1])
+        print('Возможные ключи', res[3])
+
 
 
 
@@ -48,6 +58,8 @@ def main(args):
 # Путь к файлу со словами для проверки
 # Количество проходов
 # python main.py  /home/odin/Source/information-protection-lab-2/ex -b /home/odin/Source/information-protection-lab-1/app.py -e /home/odin/Source/information-protection-lab-1/o.txt  -v words.txt -r 100:500 -C 16
+# python main.py C:\Users\odin\source\github\information-protection-lab-2/ex -b C:\Users\odin\source\github\information-protection-lab-1/app.py -e C:\Users\odin\source\github\information-protection-lab-1/o.txt -r 1000:9999 -C 12
+# python main.py C:\Users\odin\source\github\information-protection-lab-2/ex -v C:\Users\odin\source\github\information-protection-lab-2/words -e -r 1000:9999 -C 12
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
