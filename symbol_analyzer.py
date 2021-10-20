@@ -1,6 +1,8 @@
+import argparse
+import os.path
 import json
 from collections import Counter 
-from app import get_file_data
+from app import get_file_data, write_data
 
 
 class SymbolAnalyzer:
@@ -8,14 +10,17 @@ class SymbolAnalyzer:
 
     def get_symbols_frequency(self, data:str) ->  dict:
         """Из текстовой строки анализирует частоту появления каждого символа"""
-        return dict(Counter(data))
+        dct = dict(Counter(data))
+        dst = {k:dct[k] for k in self.get_alphabet(dct)}
+        print(dst)
+        return dst
 
     def get_symbols_frequency_from_alphabet(self, data:str, alp:list) -> dict:
         """Из текстовой строки анализирует частоту появления каждого символа и выдает результат только по алфавиту"""
         symbols_frequency = dict(self.get_symbols_frequency(data))
         only_symbols = [i for i in symbols_frequency.keys()]
-        return {k:symbols_frequency[k] for k in list(set(only_symbols) & set(alp))}
-
+        dst = {k:symbols_frequency[k] for k in list(set(only_symbols) & set(alp))}
+        return {k:dst[k] for k in self.get_alphabet(dst)}
 
     def get_frequency_analyse(self, data:dict,) -> dict:
         """Подсчитывает частоту появление"""
@@ -39,8 +44,35 @@ class SymbolAnalyzer:
         return list(dict(sorted(data.items(), key=lambda kv: kv[1], reverse=True)).keys())
 
 
-if __name__ == '__main__':
-    alp=list('абвгдеёжзийклмнопрстуфхцчшщъыьэюя')
+def main(args) -> None:
     sa = SymbolAnalyzer()
-    s = get_file_data('file.txt').lower()
-    print(sa.get_alphabet(sa.get_frequency_analyse(sa.get_symbols_frequency_from_alphabet(s,alp))))
+    data = None
+    freq_symb = None
+    created_alp = None
+    if args.file and os.path.exists(args.file):
+        data = get_file_data(args.file)
+
+        if args.lower:
+            data = data.lower()
+        if args.alp and os.path.exists(args.alp):
+            freq_symb = sa.get_symbols_frequency_from_alphabet(data, get_file_data(args.alp))
+        else:
+            freq_symb = sa.get_symbols_frequency(data)
+        created_alp = sa.get_alphabet(freq_symb)
+    if args.analyse_freq:
+        if args.percents:
+            sa.write(sa.get_frequency_analyse(freq_symb), args.analyse_freq)
+        else:
+            sa.write(freq_symb, args.analyse_freq)
+    if args.alp_create:
+        write_data(args.alp_create, ','.join(created_alp))
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Анализатор символов')
+    parser.add_argument('-f','--file', dest='file', default=None, help='Файл с данными для анализа', required=True)
+    parser.add_argument('-a','--analyse', dest='analyse_freq', default=None, help='Проанализировать частоту явления символов и вывести в файл')
+    parser.add_argument('-p','--percents', dest='percents',action='store_true', default=False, help='Вывод в процентах')
+    parser.add_argument('-c', '--create-alp', dest='alp_create', default=None, help='Создать алфавит сортированный')
+    parser.add_argument('--lower', dest='lower',action='store_true', default=False, help='Привести данные из файла к lower')
+    parser.add_argument('-A', dest='alp', default=None, help='Применить алфавит')
+    main(parser.parse_args())
