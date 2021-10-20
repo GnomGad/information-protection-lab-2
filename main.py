@@ -69,7 +69,8 @@ def main(args):
 # Количество проходов
 # python main.py  /home/odin/Source/information-protection-lab-2/ex -b /home/odin/Source/information-protection-lab-1/app.py -e /home/odin/Source/information-protection-lab-1/o.txt  -v words.txt -r 100:500 -C 16
 # python main.py C:\Users\odin\source\github\information-protection-lab-2/ex -b C:\Users\odin\source\github\information-protection-lab-1/app.py -e C:\Users\odin\source\github\information-protection-lab-1/o.txt -r 1000:9999 -C 12
-# python main.py C:\Users\odin\source\github\information-protection-lab-2/ex -v C:\Users\odin\source\github\information-protection-lab-2/words -e -r 1000:9999 -C 12
+# python main.py C:\Users\odin\source\github\information-protection-lab-2/ex -v C:\Users\odin\source\github\information-protection-lab-2/words -r 1000:9999 -C 12 -R 200
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

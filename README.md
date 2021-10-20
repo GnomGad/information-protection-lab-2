@@ -49,7 +49,35 @@ python -m pip install --upgrade pip && \
 pip install -r .\requirements.txt
 ```
 
-### Запуск
+### Работа
+
+#### Запуск брутфорса
+
 ```ps
-python main.py
+python main.py C:\Users\odin\source\github\information-protection-lab-2/ex -b C:\Users\odin\source\github\information-protection-lab-1/app.py -e C:\Users\odin\source\github\information-protection-lab-1/o.txt -r 1000:9999 -C 12
 ```
+
+Где первый параметр отвечает за путь к папке, куда сохранятся результаты брутфорса.
+Второй параметр `-b` отвечает за путь к проекту из первой лабы.
+`-e` отвечает за путь к зашифрованному файлу. `-r 1000:9999` отвечает за набор ключей 1000 <= X =< 9999.
+`-C` отвечает за количество ядер
+
+#### Запуск верификации
+
+```ps
+python main.py C:\Users\odin\source\github\information-protection-lab-2/ex -v C:\Users\odin\source\github\information-protection-lab-2/words -r 1000:9999 -C 12 -R 200
+```
+
+Где первый параметр отвечает за путь к папке где хранятся результаты брутфорса.
+`-v` путь к словам с верификацией. `-r` Ренж ключей проверки. `-C` количество ядер для обработки. `-R` количество символов на вывод из файле найденного по ключу
+
+
+#### Анализ символов
+
+Запускает анализ символов в файле и выдает частоту
+
+```ps
+python .\symbol_analyzer.py -f C:\Users\odin\source\github\information-protection-lab-2/ex/5914.txt -a 'an.json' -c 'file.txt' --lower -A alp -p
+```
+
+Где `-f` отвечает за файл с иходным текстом. `-a` отвечает за json файло куда выводить частоту. `-c` отвечает за файл куда выводить алфавит. `--lower` овтечает за преобразование в нижний регистр. `-A` отвечает за путь к алавиту. `-p` отвечает за вывод в процентах в файл по пути указанному в `-a`

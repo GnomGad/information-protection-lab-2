@@ -67,6 +67,8 @@ def main(args) -> None:
     if args.alp_create:
         write_data(args.alp_create, ','.join(created_alp))
 
+# python symbol_analyzer.py -f C:\Users\odin\source\github\information-protection-lab-2/ex/5914.txt -a 'an.json' -c 'file.txt' --lower -A alp -p
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Анализатор символов')
     parser.add_argument('-f','--file', dest='file', default=None, help='Файл с данными для анализа', required=True)
