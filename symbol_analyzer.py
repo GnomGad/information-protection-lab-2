@@ -65,7 +65,7 @@ def main(args) -> None:
         else:
             sa.write(freq_symb, args.analyse_freq)
     if args.alp_create:
-        write_data(args.alp_create, ','.join(created_alp))
+        write_data(args.alp_create, args.separ.join(created_alp))
 
 # python symbol_analyzer.py -f C:\Users\odin\source\github\information-protection-lab-2/ex/5914.txt -a 'an.json' -c 'file.txt' --lower -A alp -p
 
@@ -77,4 +77,5 @@ if __name__ == '__main__':
     parser.add_argument('-c', '--create-alp', dest='alp_create', default=None, help='Создать алфавит сортированный')
     parser.add_argument('--lower', dest='lower',action='store_true', default=False, help='Привести данные из файла к lower')
     parser.add_argument('-A', dest='alp', default=None, help='Применить алфавит')
+    parser.add_argument('-s',dest='separ', default='', help='Символ сепарации для алфавита')
     main(parser.parse_args())

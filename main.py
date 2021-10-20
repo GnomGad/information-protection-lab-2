@@ -46,7 +46,7 @@ def main(args):
     if args.bf and os.path.exists(args.bf):
         if not args.encrypted or not os.path.exists(args.encrypted):
                 raise Exception('Нет зашифрованого файла' )
-        bf = BruteForce(cores, krange, args.bf, args.encrypted, args.dir)
+        bf = BruteForce(cores, krange, args.bf, args.encrypted, args.dir, args.alp)
         res = bf.execute()
         print('Секунд ', res[1])
 
@@ -57,10 +57,9 @@ def main(args):
         ta = TextAnalyzer(cores, krange, args.verify, args.dir)
         res = ta.execute()
         print('Секунд', res[1])
-        print('Возможные ключи', res[3])
         if(args.read):
             read_action(args.dir, args.read, res[3])
-
+        print('Возможные ключи',len(res[3]), res[3])
 
 
 # Путь с декодированием
@@ -75,6 +74,7 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('dir', type=str, help='Путь к папке с результатом для брутфосом')
+    parser.add_argument('-a',  dest='alp',type=str, help='Путь к алфавиту', default=None)
     parser.add_argument('-b', '--brute', dest='bf', help='Если нужен брутфорс, то необходимо указать путь к  app.py из первой лабы')
     parser.add_argument('-e', '--encrypted', dest='encrypted', help='Файл для расшифроки')
     parser.add_argument('-v', '--verify', dest='verify', help='Если нужно проверить результат брутфорса, то необходимо указать путь к файлу со словами')

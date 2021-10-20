@@ -12,13 +12,13 @@ import os.path
 
 class BruteForce():
     """Смысл в прямом подборе пароля. Работает только если пароль  x < 5 знаков"""
-    def __init__(self, cores_count:int, start_end:list,app:str, file:str, edir:str)  -> None:
+    def __init__(self, cores_count:int, start_end:list,app:str, file:str, edir:str, alp:str=None)  -> None:
         self.cores = cores_count
         self.start_end = start_end
         self.file = file
         self.app = app
         self.dir = edir
-
+        self.alp = alp
         CORES = multiprocessing.cpu_count()
 
         if  cores_count < 1 or cores_count > CORES:
@@ -34,7 +34,8 @@ class BruteForce():
 
     def command(self, i:int) -> int:
         """Выполнить необходимое действие"""
-        cm = 'python {1} -a decrypt -i {2} -o {3} -k {0}'.format(i, self.app, self.file, os.path.join(self.dir, str(i)+'.txt'))
+        alp = '--alp {0}'.format(self.alp) if self.alp is not None else ''
+        cm = 'python {1} -a decrypt -i {2} -o {3} -k {0} {4}'.format(i, self.app, self.file, os.path.join(self.dir, str(i)+'.txt'),alp)
         proc = subprocess.Popen(cm, shell=True, stdout=PIPE)
         proc.wait()
         proc.communicate()
