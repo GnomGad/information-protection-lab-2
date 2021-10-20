@@ -2,8 +2,8 @@ import json
 import re
 import time 
 import subprocess
-from subprocess import Popen, PIPE
-from multiprocessing import Process, Queue, Pool
+from subprocess import PIPE
+from multiprocessing import  Pool
 from app import get_file_data
 import multiprocessing
 import tqdm
@@ -11,6 +11,7 @@ import os.path
 
 
 class BruteForce():
+    """Смысл в прямом подборе пароля. Работает только если пароль  x < 5 знаков"""
     def __init__(self, cores_count:int, start_end:list,app:str, file:str, edir:str)  -> None:
         self.cores = cores_count
         self.start_end = start_end
