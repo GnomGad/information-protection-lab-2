@@ -16,7 +16,6 @@ def read_action(dir, count, files:list):
         print(data[0:count])
 
 
-
 def main(args):
     cores = 2 if not args.cores else args.cores
     krange = [1,1]

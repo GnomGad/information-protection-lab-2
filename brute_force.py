@@ -24,7 +24,7 @@ class BruteForce():
         if  cores_count < 1 or cores_count > CORES:
             self.cores = CORES
 
-    def execute(self) -> float:
+    def execute(self) -> list:
         lenB= max(self.start_end)+1 - min(self.start_end)
         start_time = time.time()
         with Pool(self.cores) as p:
