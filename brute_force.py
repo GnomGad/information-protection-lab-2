@@ -26,12 +26,13 @@ class BruteForce():
 
     def execute(self) -> list:
         lenB= max(self.start_end)+1 - min(self.start_end)
+        lst = self.get_full_range()
         start_time = time.time()
         with Pool(self.cores) as p:
-            res = list(tqdm.tqdm(p.imap(self.command, list(range(min(self.start_end) ,max(self.start_end)+1 ))),total=lenB,desc='Ядрер использовано {0}'.format(self.cores)))
+            res = list(tqdm.tqdm(p.imap(self.command, lst),total=lenB,desc='Ядер использовано {0}'.format(self.cores)))
         end = time.time() - start_time
         return [self.cores, end, lenB]
-
+    
     def command(self, i:int) -> int:
         """Выполнить необходимое действие"""
         alp = '--alp {0}'.format(self.alp) if self.alp is not None else ''
@@ -40,3 +41,29 @@ class BruteForce():
         proc.wait()
         proc.communicate()
         return i
+    
+    def get_full_range(self):
+        _min = min(self.start_end)
+        _max = max(self.start_end)
+        lst = []
+
+        count = len(str(_max)) - len(str(_min))
+        for i in range(_min, _max+1):
+            if i in [10,100,1000,10000,100000,1000000,10000000,100000000,1000000000,10000000000]:
+                count -= 1
+            lst.append('0'*count+str(i))
+        return lst
+
+def sex()->list():
+    lst = []
+    start_end=[0, 999]
+    count = len(str(start_end[1])) - len(str(start_end[0]))
+
+    for i in range(start_end[0], start_end[1]+1):
+        if i in [10,100,1000,10000,100000,1000000,10000000,100000000,1000000000,10000000000]:
+            count -= 1
+        lst.append('0'*count+str(i))
+
+    return lst
+
+    

@@ -31,8 +31,9 @@ class TextAnalyzer():
         lenB= max(self.start_end)+1 - min(self.start_end)
         start_time = time.time()
         lst_keys = list()
+        lst = self.get_full_range()
         with Pool(self.cores) as p:
-            res = list(tqdm.tqdm(p.imap(self.command, list(range(min(self.start_end) ,max(self.start_end)+1 ))),total=lenB,desc='Ядрер использовано {0}'.format(self.cores)))
+            res = list(tqdm.tqdm(p.imap(self.command, lst),total=lenB,desc='Ядрер использовано {0}'.format(self.cores)))
             for r in res:
                 if r:
                     lst_keys.append(r)
@@ -40,6 +41,18 @@ class TextAnalyzer():
         end = time.time() - start_time
         return [self.cores, end, lenB, lst_keys]
 
+
+    def get_full_range(self):
+        _min = min(self.start_end)
+        _max = max(self.start_end)
+        lst = []
+
+        count = len(str(_max)) - len(str(_min))
+        for i in range(_min, _max+1):
+            if i in [10,100,1000,10000,100000,1000000,10000000,100000000,1000000000,10000000000]:
+                count -= 1
+            lst.append('0'*count+str(i))
+        return lst
 
 
 
