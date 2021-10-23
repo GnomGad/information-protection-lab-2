@@ -1,6 +1,6 @@
 # information-protection-lab-2
 
-[![wakatime](https://wakatime.com/badge/user/acd4725e-5655-414f-9ef4-0a588103f102/project/fd9db9a3-b8f0-406f-a252-ffef4a66224e.svg)](https://wakatime.com/badge/user/acd4725e-5655-414f-9ef4-0a588103f102/project/fd9db9a3-b8f0-406f-a252-ffef4a66224e)
+[![wakatime](https://wakatime.com/badge/github/GnomGad/information-protection-lab-2.svg)](https://wakatime.com/badge/github/GnomGad/information-protection-lab-2)
 
 ```
 Лабораторная работа №2
